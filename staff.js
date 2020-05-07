@@ -106,6 +106,11 @@ const addEmployee = () => {
         inquirer.prompt([
             {
                 type: 'input',
+                message: 'What is the id',
+                name: 'ID'
+            },
+            {
+                type: 'input',
                 message: 'What is the name?',
                 name: 'Name',
             },
@@ -126,18 +131,20 @@ const addEmployee = () => {
             }
             
         ]).then(function(response) {
-            let chosenName;
-            for(let i = 0; i < res.length; i++) {
-                if(response.chosenName == res[i].Name) {
-                    chosenName = res[i];
-                }
-            }
-
-            if(!chosenName) {
-                return console.log('Invalid Name');
-            }
-
+            connection.query('INSERT INTO department SET ?',
+        {
+            id: response.ID,
+            Name: response.Name,
+            department_name: response.Department,
+            salary: response.Salary,
+            title: response.Title
+        }, function(err) {
+            if(err) throw err;
+            console.log('\nNew Employee Added Successfully\n');
+            prompts();
         });
-    };
+
+    });
+};
 
 prompts();
